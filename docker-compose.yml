@@ -20,7 +20,7 @@ services:
       - "/data:/var/lib/postgresql/data"
     deploy:
       placement:
-        constraints: [node.hostname == CX61-2PC]
+        constraints: [node.hostname == manager1]
       mode: replicated
       replicas: 1
 
@@ -38,11 +38,9 @@ services:
       - "/nfs-share/keys:/usr/share/migasfree-server"
     deploy:
 
-      #mode: global
-      mode: replicated
-      replicas: 2
-
+      mode: global
+      
       placement:
-        constraints: [node.hostname == CX61-2PC]
+        constraints: [node.hostname != manager1]
       restart_policy:
         condition: on-failure
