@@ -1,0 +1,33 @@
+#!/bin/bash
+
+_LOG=/var/log/backup
+#set -x
+
+{
+
+. /etc/environment
+
+_PATH=/var/migasfree/dump
+
+DUMP_FILE="$1"
+
+if [ -z $DUMP_FILE ]
+then
+    DUMP_FILE=migasfree.sql
+fi
+
+mkdir -p $_PATH || :
+
+export PGPASSWORD=$POSTGRES_PASSWORD
+echo "Time zone: $TZ"
+echo "$(date) Dump database to $_PATH/$DUMP_FILE ..."
+
+$(/usr/bin/which pg_dump) -h $POSTGRES_HOST -p $POSTGRES_PORT $POSTGRES_DB -U $POSTGRES_USER > $_PATH/$DUMP_FILE
+
+if [ $? = 0 ]; then
+  echo "$(date) Done!"
+else
+  echo "$(date) ERROR !!! "
+fi
+
+} 2>&1 | tee $_LOG
