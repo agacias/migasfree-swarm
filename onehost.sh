@@ -10,7 +10,6 @@ mkdir -p /data # postgresql database
 
 
 # BUILD IMAGE migasfree/db
-cd migasfree-swarm
 cd db
 make build
 cd ..
