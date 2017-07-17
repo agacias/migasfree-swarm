@@ -19,10 +19,10 @@ services:
       - "/nfs-share/dump:/var/migasfree/dump"
       - "/data:/var/lib/postgresql/data"
     deploy:
-      placement:
-        constraints: [node.hostname == manager1]
       mode: replicated
       replicas: 1
+      restart_policy:
+        condition: on-failure
 
   server:
     image: migasfree/server:master
@@ -37,10 +37,7 @@ services:
       - "/nfs-share/public:/var/migasfree/repo"
       - "/nfs-share/keys:/usr/share/migasfree-server"
     deploy:
-
-      mode: global
-      
-      placement:
-        constraints: [node.hostname != manager1]
+      mode: replicated
+      replicas: 2
       restart_policy:
         condition: on-failure
